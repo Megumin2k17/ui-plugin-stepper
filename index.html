@@ -5,26 +5,54 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Основы Vue</title>
     <link rel="stylesheet" href="theme.css" />
+    <style>
+      [v-cloak] {
+        display: none;
+      }
+    </style>
   </head>
   <body>
 
-  <div class="container" id="app">
+  <div class="container" id="app" v-cloak>
     <div class="card">
       <h1>План по изучению Vue.js</h1>
 
       <div class="steps">
         <div class="steps-content">
-          Сюда необходимо вывести текст активного шага по его индексу
+          <!-- Сюда необходимо вывести текст активного шага по его индексу -->
+          {{steps[currentStep].text}}
         </div>
         <ul class="steps-list">
-          <li class="steps-item done"><span>1</span> Шаг 1</li>
-          <li class="steps-item done"><span>2</span> Шаг 2</li>
-          <li class="steps-item active"><span>3</span> Шаг 3</li>
-          <li class="steps-item"><span>4</span> Шаг 4</li>
+          <li 
+            class="steps-item" 
+            :class="[
+                      currentStep === idx ? 'active' : '',
+                      idx < currentStep ? 'done' : ''
+                     ]"
+            @click="setActive(idx)"
+            v-for="(step,idx) in steps" 
+            :key="step"
+          >
+            <span>{{idx +1}}</span>{{step.title}}
+          </li>
         </ul>
-        <div>
-          <button class="btn">Назад</button>
-          <button class="btn primary">Вперед</button>
+        <div v-if="!isBtnsSwapped">
+          <button 
+            class="btn" 
+            :disabled="isBackBtnDisabled ? true: false " 
+            @click="prev" 
+          >Назад</button>
+          <button 
+            class="btn primary" 
+            @click="next" 
+            ref="nextBtn"
+          >Вперед</button>
+        </div>
+        <div v-else>
+          <button 
+            class="btn" 
+            @click="reset"
+          >Начать заново</button>
         </div>
       </div>
     </div>
