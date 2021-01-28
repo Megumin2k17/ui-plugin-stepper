@@ -14,7 +14,7 @@ const App = {
         {title: 'Composition', text: 'Одним из наиболее важных обновлений в Vue 3 является появление альтернативного синтаксиса Composition API. В этом блоке вы узнаете все, чтобы полностью пользоваться данными синтаксисом на практических примерах. Помимо этого вы узнаете как работать совместно с Vue Router и Vuex.'},
       ],
       nextBtnStatement: ['Вперед', 'Закончить'],
-      btnsSwapped: false
+      isBtnsSwapped: false
     }
   },
   methods: {
@@ -24,7 +24,7 @@ const App = {
        
         this.activeIndex++
       } else {
-        this.btnsSwapped = true
+        this.isBtnsSwapped = true
       }
          
     },
@@ -40,19 +40,9 @@ const App = {
     reset() {
 
        this.activeIndex = 0
-       this.btnsSwapped = false
+       this.isBtnsSwapped = false
 
       // начать заново
-    },
-    nextOfFinish() {
-      
-      if(this.isLastStep) {
-        this.$refs.nextBtn.innerHTML = this.nextBtnStatement[1]
-        
-      } else if(!this.isLastStep && !(this.$refs.nextBtn.innerHTML === this.nextBtnStatement[0])) {
-        this.$refs.nextBtn.innerHTML = this.nextBtnStatement[0]
-      }   
-      // кнопка вперед или закончить
     },
     setActive(idx) {
 
@@ -74,19 +64,21 @@ const App = {
     isLastStep() {
       return this.activeIndex === this.steps.length-1
     },
-    isBtnsSwapped() {
-      return this.btnsSwapped
+    nextOfFinish() {
+      
+      if(this.isLastStep) {
+        return this.nextBtnStatement[1]
+        
+      } else {
+        return this.nextBtnStatement[0]
+      }   
+      // кнопка вперед или закончить
     }
 
     // тут стоит определить несколько свойств:
     // 1. текущий выбранный шаг
     // 2. выключена ли кнопка назад
     // 3. находимся ли мы на последнем шаге
-  },
-  beforeUpdate() {
-    if(this.$refs.nextBtn) {
-      this.nextOfFinish()
-    }    
   }
 }
 
